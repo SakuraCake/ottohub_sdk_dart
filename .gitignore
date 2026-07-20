@@ -1,0 +1,21 @@
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Dart/Flutter (covers subproject too)
+.dart_tool/
+build/
+coverage/
+**/doc/api/
+
+# Logs
+*.log
