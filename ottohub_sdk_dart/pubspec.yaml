@@ -1,5 +1,5 @@
 name: ottohub_sdk_dart
-description: OTTOhub HTTP API 的 Dart SDK 封装（纯 Dart，无 Flutter 依赖）。
+description: Dart SDK for the OTTOhub HTTP API (pure Dart, no Flutter dependency).
 version: 0.0.3
 
 homepage: https://github.com/SakuraCake/ottohub_sdk_dart
