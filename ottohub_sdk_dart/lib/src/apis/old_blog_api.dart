@@ -1,4 +1,5 @@
 import '../base_api.dart';
+import '../utils/rest_compat.dart';
 import '../models/old_api/old_blog_models.dart';
 
 /// 旧版博客模块接口。
@@ -31,27 +32,38 @@ abstract class IOldBlogApi {
   Future<List<BlogSummary>> getRelatedBlogList({required int bid, int? num, int? offset});
 }
 
+/// 新 REST 博客响应的数值字段为字符串,归一化后交给生成模型。
+BlogSummary _blogFromJson(Map<String, dynamic> e) => BlogSummary.fromJson(
+      coerceStringInts(e, const [
+        'bid',
+        'uid',
+        'like_count',
+        'favorite_count',
+        'view_count',
+        'comment_count',
+      ]),
+    );
+
 class OldBlogApi extends BaseApi implements IOldBlogApi {
   OldBlogApi(super.dio, super.getToken, {super.config});
 
   @override
   Future<List<BlogSummary>> getRandomBlogList({int? num}) async {
-    final response = await get('/blog/random_blog_list',
-        queryParameters: {'num': ?num});
-    final list =
-        (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;
-    return list.map((e) => BlogSummary.fromJson(e as Map<String, dynamic>)).toList();
+    final response = await get('/blog/random', queryParameters: {'num': ?num});
+    return topLevelListOf(response, 'blog_list')
+        .map(_blogFromJson)
+        .toList();
   }
 
   @override
   Future<List<BlogSummary>> getNewBlogList({int? offset, int? num}) async {
-    final response = await get('/blog/new_blog_list', queryParameters: {
-      'offset': ?offset,
+    final response = await get('/blog/latest', queryParameters: {
+      'offset': offset ?? 0,
       'num': ?num,
     });
-    final list =
-        (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;
-    return list.map((e) => BlogSummary.fromJson(e as Map<String, dynamic>)).toList();
+    return topLevelListOf(response, 'blog_list')
+        .map(_blogFromJson)
+        .toList();
   }
 
   @override
@@ -60,14 +72,14 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
     int? offset,
     int? num,
   }) async {
-    final response = await get('/blog/popular_blog_list', queryParameters: {
+    final response = await get('/blog/popular', queryParameters: {
       'time_limit': ?timeLimit,
-      'offset': ?offset,
+      'offset': offset ?? 0,
       'num': ?num,
     });
-    final list =
-        (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;
-    return list.map((e) => BlogSummary.fromJson(e as Map<String, dynamic>)).toList();
+    return topLevelListOf(response, 'blog_list')
+        .map(_blogFromJson)
+        .toList();
   }
 
   @override
@@ -99,19 +111,19 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
     int? offset,
     int? num,
   }) async {
-    final response = await get('/blog/user_blog_list', queryParameters: {
-      'uid': uid,
-      'offset': ?offset,
+    final response =
+        await get('/blog/users/$uid/blogs', queryParameters: {
+      'offset': offset ?? 0,
       'num': ?num,
     });
-    final list =
-        (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;
-    return list.map((e) => BlogSummary.fromJson(e as Map<String, dynamic>)).toList();
+    return topLevelListOf(response, 'blog_list')
+        .map(_blogFromJson)
+        .toList();
   }
 
   @override
   Future<List<BlogAuditItem>> getAuditBlogList({int? offset, int? num}) async {
-    final response = await get('/blog/audit_blog_list', queryParameters: {
+    final response = await get('/blog/audit_blog_list', auth: true, queryParameters: {
       'offset': ?offset,
       'num': ?num,
     });
@@ -122,9 +134,18 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
 
   @override
   Future<BlogDetail> getBlogDetail(int bid) async {
-    final response = await get('/blog/get_blog_detail',
-        queryParameters: {'bid': bid});
-    return BlogDetail.fromJson(response['data'] as Map<String, dynamic>);
+    // 2026-09 服务端迁移:新路由 /blog/{bid}/detail,字段位于响应顶层。
+    final response = await get('/blog/$bid/detail');
+    return BlogDetail.fromJson(coerceStringInts(response, const [
+      'bid',
+      'uid',
+      'like_count',
+      'favorite_count',
+      'view_count',
+      'comment_count',
+      'if_like',
+      'if_favorite',
+    ]));
   }
 
   @override

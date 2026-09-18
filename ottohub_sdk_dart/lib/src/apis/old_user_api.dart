@@ -1,6 +1,8 @@
 import '../base_api.dart';
 import '../models/old_api/old_user_models.dart';
 import '../models/old_api/old_engagement_models.dart';
+import '../exceptions/api_exception.dart';
+import '../utils/rest_compat.dart';
 
 /// 旧版用户模块接口。
 abstract class IOldUserApi {
@@ -42,9 +44,25 @@ class OldUserApi extends BaseApi implements IOldUserApi {
 
   @override
   Future<UserDetail> getUserDetail(int uid) async {
-    final response = await get('/user/get_user_detail',
-        queryParameters: {'uid': uid});
-    return UserDetail.fromJson(response['data'] as Map<String, dynamic>);
+    // 2026-09 服务端迁移:旧 /user/get_user_detail 已下线,新路由为
+    // REST 风格 /user/{uid},数值字段以字符串返回,需归一化。
+    final response = await get('/user/$uid');
+    final data = response['data'];
+    if (data is! Map<String, dynamic>) {
+      throw const ApiException('system_error');
+    }
+    return UserDetail.fromJson(coerceStringInts(data, const [
+      'uid',
+      'experience',
+      'video_num',
+      'blog_num',
+      'seiga_num',
+      'media_num',
+      'followings_count',
+      'fans_count',
+      'total_view_count',
+      'total_like_count',
+    ]));
   }
 }
 
@@ -70,27 +88,27 @@ class OldEngagementApi extends BaseApi implements IOldEngagementApi {
 
   @override
   Future<OldLikeToggleResponse> likeBlog(int bid) async {
-    final response = await post('/engagement/like_blog', data: {'bid': bid});
+    final response = await post('/engagement/like_blog', auth: true, data: {'bid': bid});
     return OldLikeToggleResponse.fromJson(response['data'] as Map<String, dynamic>);
   }
 
   @override
   Future<OldFavoriteToggleResponse> favoriteBlog(int bid) async {
     final response =
-        await post('/engagement/favorite_blog', data: {'bid': bid});
+        await post('/engagement/favorite_blog', auth: true, data: {'bid': bid});
     return OldFavoriteToggleResponse.fromJson(response['data'] as Map<String, dynamic>);
   }
 
   @override
   Future<OldLikeToggleResponse> likeVideo(int vid) async {
-    final response = await post('/engagement/like_video', data: {'vid': vid});
+    final response = await post('/engagement/like_video', auth: true, data: {'vid': vid});
     return OldLikeToggleResponse.fromJson(response['data'] as Map<String, dynamic>);
   }
 
   @override
   Future<OldFavoriteToggleResponse> favoriteVideo(int vid) async {
     final response =
-        await post('/engagement/favorite_video', data: {'vid': vid});
+        await post('/engagement/favorite_video', auth: true, data: {'vid': vid});
     return OldFavoriteToggleResponse.fromJson(response['data'] as Map<String, dynamic>);
   }
 }

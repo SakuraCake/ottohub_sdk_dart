@@ -17,6 +17,7 @@ BlogSummary _$BlogSummaryFromJson(Map<String, dynamic> json) => BlogSummary(
   viewCount: (json['view_count'] as num).toInt(),
   avatarUrl: json['avatar_url'] as String?,
   commentCount: (json['comment_count'] as num?)?.toInt(),
+  username: json['username'] as String?,
   thumbnails: (json['thumbnails'] as List<dynamic>?)
       ?.map((e) => e as String)
       .toList(),
@@ -34,6 +35,7 @@ Map<String, dynamic> _$BlogSummaryToJson(BlogSummary instance) =>
       'view_count': instance.viewCount,
       'avatar_url': ?instance.avatarUrl,
       'comment_count': ?instance.commentCount,
+      'username': ?instance.username,
       'thumbnails': ?instance.thumbnails,
     };
 

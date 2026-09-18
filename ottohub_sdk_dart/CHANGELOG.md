@@ -1,3 +1,14 @@
+## 0.0.3
+
+- fix: 服务端 2026-09 REST 迁移对齐——评论(`/comment/videos/{vid}` 等)、
+  用户(`/user/{uid}`)、博客(`/blog/latest`、`/blog/users/{uid}/blogs`、
+  `/blog/{bid}/detail`)路由更新;旧 `*_list`/`get_*_detail` 路由已下线。
+- fix: 服务端数值字段以字符串返回,`VideoDetail` 全部 int 字段挂
+  StringToIntConverter / StringToNullableIntConverter,消除严格强转崩溃。
+- fix: `BlogSummary` 补充 `username` 字段。
+- fix: token 注入改为仅 `auth: true` 请求携带(公开接口不再附带 token)。
+- chore: 新增 `src/utils/rest_compat.dart` 兼容工具;测试同步更新。
+
 ## 0.0.2
 
 - 修复 LICENSE 文件（BSD 3-Clause）

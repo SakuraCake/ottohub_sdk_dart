@@ -80,14 +80,16 @@ void main() {
       expect(result, '1');
     });
 
-    test('token injected into POST body', () async {
+    test('public login does not inject token', () async {
       final mockDio = _MockDio();
       String? token = 'my_token';
       final api = AuthApi(mockDio, () => token);
 
       when(() => mockDio.post(any(), data: any(named: 'data')))
           .thenAnswer((i) async {
-        expect((i.namedArguments[#data] as Map)['token'], 'my_token');
+        final data = i.namedArguments[#data] as Map;
+        // login 为公开接口,不注入 token。
+        expect(data.containsKey('token'), isFalse);
         return Response(
           data: {'status': 'success', 'uid': '123', 'token': 'tok'},
           requestOptions: RequestOptions(path: '/auth/login'),

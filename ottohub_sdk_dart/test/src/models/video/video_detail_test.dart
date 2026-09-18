@@ -54,7 +54,7 @@ void main() {
       expect(detail.tag, '#标签1#标签2');
       expect(detail.ifLike, 0);
       expect(detail.ifFavorite, 0);
-      expect(detail.duration, '223');
+      expect(detail.duration, 223);
       expect(detail.lastWatchSecond, -1);
 
       expect(detail.channelDetail, isNotNull);
@@ -109,15 +109,15 @@ void main() {
         uid: '1',
         title: 't',
         time: '2023-01-01',
-        likeCount: '0',
-        favoriteCount: '0',
-        viewCount: '0',
+        likeCount: 0,
+        favoriteCount: 0,
+        viewCount: 0,
         coverUrl: '',
         username: 'u',
         ifLike: 0,
         ifFavorite: 0,
         lastWatchSecond: -1,
-        duration: '100',
+        duration: 100,
       );
 
       final json = detail.toJson();

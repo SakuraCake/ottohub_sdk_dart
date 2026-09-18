@@ -16,6 +16,7 @@ class BlogSummary {
   final int viewCount;
   final String? avatarUrl;
   final int? commentCount;
+  final String? username;
   final List<String>? thumbnails;
 
   const BlogSummary({
@@ -29,6 +30,7 @@ class BlogSummary {
     required this.viewCount,
     this.avatarUrl,
     this.commentCount,
+    this.username,
     this.thumbnails,
   });
 
