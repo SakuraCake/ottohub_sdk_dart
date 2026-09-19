@@ -36,12 +36,12 @@ class OldUserApi extends BaseApi implements IOldUserApi {
 
   @override
   Future<List<UserSummary>> getUserById(int uid) async {
-    final response = await get('/user/id_user_list',
-        queryParameters: {'uid': uid});
+    // 2026-09 REST 迁移:旧 /user/id_user_list 已下线,复用 /user/{uid}
+    // 详情端点,包装成单元素列表。
+    final response = await get('/user/$uid');
     final data = response['data'];
-    final list = (data is Map<String, dynamic> ? data['user_list'] : null)
-        as List<dynamic>? ?? const [];
-    return list.map((e) => UserSummary.fromJson(e as Map<String, dynamic>)).toList();
+    if (data is! Map<String, dynamic>) return const [];
+    return [UserSummary.fromJson(coerceStringInts(data, const ['uid', 'fans_count', 'followings_count']))];
   }
 
   @override

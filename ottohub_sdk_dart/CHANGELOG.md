@@ -1,3 +1,8 @@
+## 0.0.10
+
+- fix: `getUserProfile` 读 /profile 顶层字段(与 getUserData 对齐)。
+- fix: `getUserById` 旧 `/user/id_user_list` 已下线,迁移至 `/user/{uid}`。
+- fix: `FollowingUser.uid` 字符串转换器。
 ## 0.0.9
 
 - fix: `FavoriteBlogItem`/`FavoriteVideoItem` int 字段挂字符串转换器

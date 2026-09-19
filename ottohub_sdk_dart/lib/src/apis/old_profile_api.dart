@@ -121,7 +121,7 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
     // 2026-09 REST 迁移:/profile,profile 字段位于响应顶层。
     final response = await get('/profile', auth: true);
     return UserProfile.fromJson(
-        response['profile'] as Map<String, dynamic>? ?? const {});
+        response as Map<String, dynamic>? ?? const {});
   }
 
   @override

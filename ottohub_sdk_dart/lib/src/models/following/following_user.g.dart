@@ -8,7 +8,7 @@ part of 'following_user.dart';
 
 FollowingUser _$FollowingUserFromJson(Map<String, dynamic> json) =>
     FollowingUser(
-      uid: (json['uid'] as num).toInt(),
+      uid: const StringToIntConverter().fromJson(json['uid']),
       username: json['username'] as String,
       intro: json['intro'] as String?,
       avatarUrl: json['avatar_url'] as String,
@@ -17,7 +17,7 @@ FollowingUser _$FollowingUserFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$FollowingUserToJson(FollowingUser instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'uid': const StringToIntConverter().toJson(instance.uid),
       'username': instance.username,
       'intro': instance.intro,
       'avatar_url': instance.avatarUrl,

@@ -1,10 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../utils/converters.dart';
 
 part 'following_user.g.dart';
 
 /// 关注的用户信息。
 @JsonSerializable(fieldRename: FieldRename.snake)
 class FollowingUser {
+  @StringToIntConverter()
   final int uid;
   final String username;
   final String? intro;
