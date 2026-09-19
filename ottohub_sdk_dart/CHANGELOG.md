@@ -1,3 +1,8 @@
+## 0.0.9
+
+- fix: `FavoriteBlogItem`/`FavoriteVideoItem` int 字段挂字符串转换器
+  (收藏列表响应数值字段为字符串)。
+- fix: `getUserById` 容错缺失 data 信封。
 ## 0.0.8
 
 - fix: `getUserData` 改读 /profile 顶层统计字段(与响应实际形状一致)。

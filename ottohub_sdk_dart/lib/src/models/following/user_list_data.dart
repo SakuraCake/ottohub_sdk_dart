@@ -6,6 +6,8 @@ part 'user_list_data.g.dart';
 /// 用户列表响应（关注列表等）。
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserListData {
+  /// 服务端可能缺省/返回 null,容错为空列表。
+  @JsonKey(defaultValue: [])
   final List<FollowingUser> userList;
 
   const UserListData({

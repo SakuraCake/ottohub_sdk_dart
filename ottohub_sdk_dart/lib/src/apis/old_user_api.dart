@@ -38,8 +38,9 @@ class OldUserApi extends BaseApi implements IOldUserApi {
   Future<List<UserSummary>> getUserById(int uid) async {
     final response = await get('/user/id_user_list',
         queryParameters: {'uid': uid});
-    final list =
-        (response['data'] as Map<String, dynamic>)['user_list'] as List<dynamic>;
+    final data = response['data'];
+    final list = (data is Map<String, dynamic> ? data['user_list'] : null)
+        as List<dynamic>? ?? const [];
     return list.map((e) => UserSummary.fromJson(e as Map<String, dynamic>)).toList();
   }
 

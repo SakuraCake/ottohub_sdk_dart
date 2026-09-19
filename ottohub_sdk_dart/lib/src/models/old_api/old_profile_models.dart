@@ -7,15 +7,22 @@ part 'old_profile_models.g.dart';
 /// 已收藏的博客条目。
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class FavoriteBlogItem {
+  @StringToIntConverter()
   final int bid;
+  @StringToIntConverter()
   final int uid;
   final String title;
   final String? content;
   final String time;
+  @StringToIntConverter()
   final int likeCount;
+  @StringToIntConverter()
   final int favoriteCount;
+  @StringToIntConverter()
   final int viewCount;
+  @StringToNullableIntConverter()
   final int? isDeleted;
+  @StringToNullableIntConverter()
   final int? auditStatus;
   final String? avatarUrl;
   final List<String>? thumbnails;
@@ -44,12 +51,17 @@ class FavoriteBlogItem {
 /// 已收藏的视频条目。
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class FavoriteVideoItem {
+  @StringToIntConverter()
   final int vid;
+  @StringToIntConverter()
   final int uid;
   final String title;
   final String time;
+  @StringToIntConverter()
   final int likeCount;
+  @StringToIntConverter()
   final int favoriteCount;
+  @StringToIntConverter()
   final int viewCount;
   final int? isDeleted;
   final int? auditStatus;
