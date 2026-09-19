@@ -1,3 +1,10 @@
+## 0.0.4
+
+- fix: 用户搜索迁移至 `/user/search`(offset 必填);旧 `/user/select_user_list` 已下线。
+- fix: 收藏/历史路由迁移:`/video/favorite-list`、`/blog/favorite-list`、
+  `/video/history-list`、`/blog/history-list`(列表位于响应顶层,数值字段为字符串)。
+- fix: 用户资料统一至 `/profile`;博客搜索/单查/相关迁移至
+  `/blog/search`、`/blog/{bid}`、`/blog/related/{bid}`。
 ## 0.0.3
 
 - fix: 服务端 2026-09 REST 迁移对齐——评论(`/comment/videos/{vid}` 等)、

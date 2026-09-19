@@ -87,8 +87,9 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
     required String searchTerm,
     int? num,
   }) async {
-    final response = await get('/blog/search_blog_list', queryParameters: {
+    final response = await get('/blog/search', queryParameters: {
       'search_term': searchTerm,
+      'offset': 0,
       'num': ?num,
     });
     final list =
@@ -98,11 +99,18 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
 
   @override
   Future<List<BlogSummary>> getBlogById(int bid) async {
-    final response = await get('/blog/id_blog_list',
-        queryParameters: {'bid': bid});
-    final list =
-        (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;
-    return list.map((e) => BlogSummary.fromJson(e as Map<String, dynamic>)).toList();
+    // 2026-09 REST 迁移:/blog/{bid}(顶层字段)。
+    final response = await get('/blog/$bid');
+    return [
+      BlogSummary.fromJson(coerceStringInts(response, const [
+        'bid',
+        'uid',
+        'like_count',
+        'favorite_count',
+        'view_count',
+        'comment_count',
+      ])),
+    ];
   }
 
   @override
@@ -154,10 +162,9 @@ class OldBlogApi extends BaseApi implements IOldBlogApi {
     int? num,
     int? offset,
   }) async {
-    final response = await get('/blog/related_blog_list', queryParameters: {
-      'bid': bid,
+    final response = await get('/blog/related/$bid', queryParameters: {
       'num': ?num,
-      'offset': ?offset,
+      'offset': offset ?? 0,
     });
     final list =
         (response['data'] as Map<String, dynamic>)['blog_list'] as List<dynamic>;

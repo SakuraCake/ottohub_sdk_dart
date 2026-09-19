@@ -24,8 +24,10 @@ class OldUserApi extends BaseApi implements IOldUserApi {
     required String searchTerm,
     int? num,
   }) async {
-    final response = await get('/user/select_user_list', queryParameters: {
+    // 2026-09 REST 迁移:/user/search,offset 必填(首页传 0)。
+    final response = await get('/user/search', queryParameters: {
       'search_term': searchTerm,
+      'offset': 0,
       'num': ?num,
     });
     final list =

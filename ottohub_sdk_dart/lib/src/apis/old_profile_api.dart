@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
 import '../base_api.dart';
+import '../utils/rest_compat.dart';
 import '../models/old_api/old_profile_models.dart';
 import '../models/old_api/old_creator_models.dart';
 import '../models/video/video_summary.dart';
@@ -58,16 +59,22 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
     int? offset,
     int? num,
   }) async {
-    final response = await get('/profile/favorite_blog_list', auth: true, queryParameters: {
-      'offset': ?offset,
+    // 2026-09 REST 迁移:/blog/favorite-list,blog_list 位于响应顶层。
+    final response = await get('/blog/favorite-list', auth: true, queryParameters: {
+      'offset': offset ?? 0,
       'num': ?num,
     });
-    final data = response['data'] as Map<String, dynamic>;
-    final list = (data['blog_list'] as List<dynamic>)
-        .map((e) => FavoriteBlogItem.fromJson(e as Map<String, dynamic>))
+    final list = topLevelListOf(response, 'blog_list')
+        .map((e) => FavoriteBlogItem.fromJson(coerceStringInts(e, const [
+              'bcid',
+              'uid',
+              'like_count',
+              'favorite_count',
+              'view_count',
+              'comment_count',
+            ])))
         .toList();
-    final count = data['favorite_blog_count'] as int?;
-    return {'blog_list': list, 'favorite_blog_count': ?count};
+    return {'blog_list': list};
   }
 
   @override
@@ -75,34 +82,46 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
     int? offset,
     int? num,
   }) async {
-    final response = await get('/profile/favorite_video_list', auth: true, queryParameters: {
-      'offset': ?offset,
+    // 2026-09 REST 迁移:/video/favorite-list,video_list 位于响应顶层。
+    final response = await get('/video/favorite-list', auth: true, queryParameters: {
+      'offset': offset ?? 0,
       'num': ?num,
     });
-    final data = response['data'] as Map<String, dynamic>;
-    final list = (data['video_list'] as List<dynamic>)
-        .map((e) => FavoriteVideoItem.fromJson(e as Map<String, dynamic>))
+    final list = topLevelListOf(response, 'video_list')
+        .map((e) => FavoriteVideoItem.fromJson(coerceStringInts(e, const [
+              'vid',
+              'uid',
+              'like_count',
+              'favorite_count',
+              'view_count',
+              'duration',
+            ])))
         .toList();
-    final count = data['favorite_video_count'] as int?;
-    return {'video_list': list, 'favorite_video_count': ?count};
+    return {'video_list': list};
   }
 
   @override
   Future<List<VideoSummary>> getHistoryVideoList() async {
-    final response = await get('/profile/history_video_list', auth: true);
-    final list = (response['data'] as Map<String, dynamic>)['video_list']
-        as List<dynamic>;
-    return list
-        .map((e) => VideoSummary.fromJson(e as Map<String, dynamic>))
+    // 2026-09 REST 迁移:/video/history-list,video_list 位于响应顶层。
+    final response = await get('/video/history-list', auth: true);
+    return topLevelListOf(response, 'video_list')
+        .map((e) => VideoSummary.fromJson(coerceStringInts(e, const [
+              'vid',
+              'uid',
+              'like_count',
+              'favorite_count',
+              'view_count',
+              'duration',
+            ])))
         .toList();
   }
 
   @override
   Future<UserProfile> getUserProfile() async {
-    final response = await get('/profile/user_profile', auth: true);
+    // 2026-09 REST 迁移:/profile,profile 字段位于响应顶层。
+    final response = await get('/profile', auth: true);
     return UserProfile.fromJson(
-        (response['data'] as Map<String, dynamic>)['profile']
-            as Map<String, dynamic>);
+        response['profile'] as Map<String, dynamic>? ?? const {});
   }
 
   @override
@@ -139,8 +158,11 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
 
   @override
   Future<UserData> getUserData() async {
-    final response = await get('/profile/user_data', auth: true);
-    return UserData.fromJson(response['data'] as Map<String, dynamic>);
+    // 2026-09 REST 迁移:/profile;统计字段与 UserData 对齐。
+    final response = await get('/profile', auth: true);
+    return UserData.fromJson(coerceStringInts(
+        response['profile'] as Map<String, dynamic>? ?? const {},
+        const ['video_num', 'blog_num', 'followings_count', 'fans_count']));
   }
 
   @override
