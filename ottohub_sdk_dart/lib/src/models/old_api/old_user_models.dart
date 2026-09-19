@@ -1,10 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../utils/converters.dart';
 
 part 'old_user_models.g.dart';
 
 /// 用户摘要信息。
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class UserSummary {
+  @StringToIntConverter()
   final int uid;
   final String username;
   final String? intro;
