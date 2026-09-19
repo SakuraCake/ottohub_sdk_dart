@@ -1,3 +1,7 @@
+## 0.0.5
+
+- feat: 新增消息通知 API——`getCommentReplies`(`/im/comment-replies`,
+  kind: 1=评论 2=回复)与 `getMentions`(`/im/mentions`),配套 `IMNoticeItem` 模型。
 ## 0.0.4
 
 - fix: 用户搜索迁移至 `/user/search`(offset 必填);旧 `/user/select_user_list` 已下线。

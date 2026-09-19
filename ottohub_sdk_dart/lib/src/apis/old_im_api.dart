@@ -27,6 +27,23 @@ abstract class IOldImApi {
   /// 删除消息。
   Future<void> deleteMessage(int msgId);
 
+  /// 评论/回复通知列表(2026-09 新端点)。
+  ///
+  /// [kind]: 1=评论 2=回复;[contentType]: 1=视频 2=博客(过滤用,可空)。
+  Future<List<IMNoticeItem>> getCommentReplies({
+    required int offset,
+    int num = 20,
+    int? kind,
+    int? contentType,
+  });
+
+  /// 提及(@)通知列表(2026-09 新端点)。
+  Future<List<IMNoticeItem>> getMentions({
+    required int offset,
+    int num = 20,
+    int? contentType,
+  });
+
   /// 获取好友列表。
   Future<List<IMFriend>> getFriendList({int? offset, int? num, int? ifTimeDesc});
 
@@ -36,6 +53,63 @@ abstract class IOldImApi {
 
 class OldImApi extends BaseApi implements IOldImApi {
   OldImApi(super.dio, super.getToken, {super.config});
+
+  static Map<String, dynamic> _noticeFromRaw(Map<String, dynamic> e) =>
+      <String, dynamic>{
+        'rid': e['rid'],
+        'sender_uid': e['sender_uid'],
+        'sender_username': e['sender_username'],
+        'sender_avatar_url': e['sender_avatar_url'],
+        'time': e['time'],
+        'is_read': e['is_read'],
+        'content_type': e['content_type'],
+        'content_id': e['content_id'],
+        'content_title': e['content_title'],
+        'content': e['content'],
+        if (e['kind'] != null) 'kind': e['kind'],
+        if (e['excerpt'] != null) 'excerpt': e['excerpt'],
+        if (e['context_type'] != null) 'context_type': e['context_type'],
+      };
+
+  static List<IMNoticeItem> _noticeListOf(Map<String, dynamic> response) {
+    final list = response['message_list'];
+    if (list is! List<dynamic>) return const [];
+    return list
+        .whereType<Map<String, dynamic>>()
+        .map(_noticeFromRaw)
+        .map(IMNoticeItem.fromJson)
+        .toList();
+  }
+
+  @override
+  Future<List<IMNoticeItem>> getCommentReplies({
+    required int offset,
+    int num = 20,
+    int? kind,
+    int? contentType,
+  }) async {
+    final response = await get('/im/comment-replies', auth: true, queryParameters: {
+      'offset': offset,
+      'num': num,
+      'kind': ?kind,
+      'content_type': ?contentType,
+    });
+    return _noticeListOf(response);
+  }
+
+  @override
+  Future<List<IMNoticeItem>> getMentions({
+    required int offset,
+    int num = 20,
+    int? contentType,
+  }) async {
+    final response = await get('/im/mentions', auth: true, queryParameters: {
+      'offset': offset,
+      'num': num,
+      'content_type': ?contentType,
+    });
+    return _noticeListOf(response);
+  }
 
   @override
   Future<IMNewMessageNum> getNewMessageNum() async {

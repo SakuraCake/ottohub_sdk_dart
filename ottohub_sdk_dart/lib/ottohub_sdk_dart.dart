@@ -51,3 +51,4 @@ export 'src/models/moderation/moderation_item.dart';
 export 'src/models/moderation/moderation_log.dart';
 export 'src/models/old_api/old_system_models.dart' show Slide, LaunchScreen, LegalDocuments;
 export 'src/models/old_api/old_blog_models.dart' show BlogSummary, BlogDetail;
+export 'src/models/old_api/old_im_models.dart' show IMNoticeItem;

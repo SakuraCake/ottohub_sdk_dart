@@ -75,3 +75,38 @@ Map<String, dynamic> _$IMReadMessageToJson(IMReadMessage instance) =>
       'sender_name': ?instance.senderName,
       'receiver_name': ?instance.receiverName,
     };
+
+IMNoticeItem _$IMNoticeItemFromJson(Map<String, dynamic> json) => IMNoticeItem(
+  rid: (json['rid'] as num?)?.toInt(),
+  senderUid: (json['sender_uid'] as num?)?.toInt(),
+  mid: (json['mid'] as num?)?.toInt(),
+  senderUsername: json['sender_username'] as String?,
+  senderAvatarUrl: json['sender_avatar_url'] as String?,
+  time: json['time'] as String?,
+  isRead: (json['is_read'] as num?)?.toInt(),
+  contentType: (json['content_type'] as num?)?.toInt(),
+  contentId: (json['content_id'] as num?)?.toInt(),
+  contentTitle: json['content_title'] as String?,
+  content: json['content'] as String?,
+  kind: (json['kind'] as num?)?.toInt(),
+  excerpt: json['excerpt'] as String?,
+  contextType: (json['context_type'] as num?)?.toInt(),
+);
+
+Map<String, dynamic> _$IMNoticeItemToJson(IMNoticeItem instance) =>
+    <String, dynamic>{
+      'rid': ?instance.rid,
+      'sender_uid': ?instance.senderUid,
+      'mid': ?instance.mid,
+      'sender_username': ?instance.senderUsername,
+      'sender_avatar_url': ?instance.senderAvatarUrl,
+      'time': ?instance.time,
+      'is_read': ?instance.isRead,
+      'content_type': ?instance.contentType,
+      'content_id': ?instance.contentId,
+      'content_title': ?instance.contentTitle,
+      'content': ?instance.content,
+      'kind': ?instance.kind,
+      'excerpt': ?instance.excerpt,
+      'context_type': ?instance.contextType,
+    };

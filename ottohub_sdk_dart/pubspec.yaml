@@ -1,6 +1,6 @@
 name: ottohub_sdk_dart
 description: Dart SDK for the OTTOhub HTTP API (pure Dart, no Flutter dependency).
-version: 0.0.4
+version: 0.0.5
 
 homepage: https://github.com/SakuraCake/ottohub_sdk_dart
 repository: https://github.com/SakuraCake/ottohub_sdk_dart
