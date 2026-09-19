@@ -1,3 +1,6 @@
+## 0.0.11
+
+- fix: `UserSummary.username` 容错 null(服务端搜索结果可缺)。
 ## 0.0.10
 
 - fix: `getUserProfile` 读 /profile 顶层字段(与 getUserData 对齐)。

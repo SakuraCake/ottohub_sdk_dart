@@ -8,6 +8,9 @@ part 'old_user_models.g.dart';
 class UserSummary {
   @StringToIntConverter()
   final int uid;
+
+  /// 服务端可能返回 null,容错为空串。
+  @JsonKey(defaultValue: '')
   final String username;
   final String? intro;
   final String? time;
@@ -31,6 +34,9 @@ class UserSummary {
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class UserDetail {
   final int uid;
+
+  /// 服务端可能返回 null,容错为空串。
+  @JsonKey(defaultValue: '')
   final String username;
   final String? intro;
   final String? time;

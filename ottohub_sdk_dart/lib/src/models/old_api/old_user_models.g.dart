@@ -8,7 +8,7 @@ part of 'old_user_models.dart';
 
 UserSummary _$UserSummaryFromJson(Map<String, dynamic> json) => UserSummary(
   uid: const StringToIntConverter().fromJson(json['uid']),
-  username: json['username'] as String,
+  username: json['username'] as String? ?? '',
   intro: json['intro'] as String?,
   time: json['time'] as String?,
   avatarUrl: json['avatar_url'] as String?,
@@ -25,7 +25,7 @@ Map<String, dynamic> _$UserSummaryToJson(UserSummary instance) =>
 
 UserDetail _$UserDetailFromJson(Map<String, dynamic> json) => UserDetail(
   uid: (json['uid'] as num).toInt(),
-  username: json['username'] as String,
+  username: json['username'] as String? ?? '',
   intro: json['intro'] as String?,
   time: json['time'] as String?,
   sex: json['sex'] as String?,
