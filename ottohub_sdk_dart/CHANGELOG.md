@@ -1,3 +1,7 @@
+## 0.0.8
+
+- fix: `getUserData` 改读 /profile 顶层统计字段(与响应实际形状一致)。
+- fix: `FollowingApi.getFollowingList` 容错 data 为 null。
 ## 0.0.7
 
 - fix: `UserProfile.username` 容错服务端 null(defaultValue 空串)。

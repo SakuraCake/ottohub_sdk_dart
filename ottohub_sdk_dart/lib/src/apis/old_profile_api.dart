@@ -158,11 +158,10 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
 
   @override
   Future<UserData> getUserData() async {
-    // 2026-09 REST 迁移:/profile;统计字段与 UserData 对齐。
+    // 2026-09 REST 迁移:/profile,统计字段位于响应顶层。
     final response = await get('/profile', auth: true);
     return UserData.fromJson(coerceStringInts(
-        response['profile'] as Map<String, dynamic>? ?? const {},
-        const ['video_num', 'blog_num', 'followings_count', 'fans_count']));
+        response, const ['video_num', 'blog_num', 'followings_count', 'fans_count']));
   }
 
   @override

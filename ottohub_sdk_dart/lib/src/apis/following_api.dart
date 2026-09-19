@@ -73,7 +73,8 @@ class FollowingApi extends BaseApi implements IFollowingApi {
     if (num != null) params['num'] = num;
     final response =
         await get('/following/list/$uid', queryParameters: params);
-    return UserListData.fromJson(response['data'] as Map<String, dynamic>);
+    return UserListData.fromJson(
+        response['data'] as Map<String, dynamic>? ?? const {});
   }
 
   @override
