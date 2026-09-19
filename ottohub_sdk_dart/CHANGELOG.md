@@ -1,3 +1,8 @@
+## 0.0.6
+
+- fix: `UserProfile.uid/experience`、`UserData` 统计字段挂字符串转换器
+  (服务端数值字段为字符串,严格强转在 /profile 解析时崩溃)。
+- fix: `searchUsers` 适配 `/user/search` 顶层 user_list 响应并容错空 data。
 ## 0.0.5
 
 - feat: 新增消息通知 API——`getCommentReplies`(`/im/comment-replies`,

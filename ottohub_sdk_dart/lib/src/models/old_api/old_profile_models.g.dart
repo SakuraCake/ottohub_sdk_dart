@@ -73,7 +73,7 @@ Map<String, dynamic> _$FavoriteVideoItemToJson(FavoriteVideoItem instance) =>
     };
 
 UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
-  uid: (json['uid'] as num).toInt(),
+  uid: const StringToIntConverter().fromJson(json['uid']),
   email: json['email'] as String?,
   phone: json['phone'] as String?,
   qq: json['qq'] as String?,
@@ -82,12 +82,12 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
   sex: json['sex'] as String?,
   intro: json['intro'] as String?,
   honour: json['honour'] as String?,
-  experience: (json['experience'] as num?)?.toInt(),
+  experience: const StringToNullableIntConverter().fromJson(json['experience']),
 );
 
 Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'uid': ?const StringToIntConverter().toJson(instance.uid),
       'email': ?instance.email,
       'phone': ?instance.phone,
       'qq': ?instance.qq,
@@ -96,7 +96,9 @@ Map<String, dynamic> _$UserProfileToJson(UserProfile instance) =>
       'sex': ?instance.sex,
       'intro': ?instance.intro,
       'honour': ?instance.honour,
-      'experience': ?instance.experience,
+      'experience': ?const StringToNullableIntConverter().toJson(
+        instance.experience,
+      ),
     };
 
 ManageBlogItem _$ManageBlogItemFromJson(Map<String, dynamic> json) =>
@@ -186,17 +188,21 @@ Map<String, dynamic> _$ManageVideoItemToJson(ManageVideoItem instance) =>
     };
 
 UserData _$UserDataFromJson(Map<String, dynamic> json) => UserData(
-  videoNum: (json['video_num'] as num).toInt(),
-  blogNum: (json['blog_num'] as num).toInt(),
-  followingsCount: (json['followings_count'] as num).toInt(),
-  fansCount: (json['fans_count'] as num).toInt(),
+  videoNum: const StringToIntConverter().fromJson(json['video_num']),
+  blogNum: const StringToIntConverter().fromJson(json['blog_num']),
+  followingsCount: const StringToIntConverter().fromJson(
+    json['followings_count'],
+  ),
+  fansCount: const StringToIntConverter().fromJson(json['fans_count']),
 );
 
 Map<String, dynamic> _$UserDataToJson(UserData instance) => <String, dynamic>{
-  'video_num': instance.videoNum,
-  'blog_num': instance.blogNum,
-  'followings_count': instance.followingsCount,
-  'fans_count': instance.fansCount,
+  'video_num': const StringToIntConverter().toJson(instance.videoNum),
+  'blog_num': const StringToIntConverter().toJson(instance.blogNum),
+  'followings_count': const StringToIntConverter().toJson(
+    instance.followingsCount,
+  ),
+  'fans_count': const StringToIntConverter().toJson(instance.fansCount),
 };
 
 BlogDraft _$BlogDraftFromJson(Map<String, dynamic> json) =>

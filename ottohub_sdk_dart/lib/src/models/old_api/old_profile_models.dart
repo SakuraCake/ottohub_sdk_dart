@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import '../utils/converters.dart';
 import '../video/channel_detail.dart';
 
 part 'old_profile_models.g.dart';
@@ -80,6 +81,7 @@ class FavoriteVideoItem {
 /// 用户个人资料。
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class UserProfile {
+  @StringToIntConverter()
   final int uid;
   final String? email;
   final String? phone;
@@ -89,6 +91,7 @@ class UserProfile {
   final String? sex;
   final String? intro;
   final String? honour;
+  @StringToNullableIntConverter()
   final int? experience;
 
   const UserProfile({
@@ -199,9 +202,13 @@ class ManageVideoItem {
 /// 用户统计数据（作品数、关注/粉丝数）。
 @JsonSerializable(fieldRename: FieldRename.snake)
 class UserData {
+  @StringToIntConverter()
   final int videoNum;
+  @StringToIntConverter()
   final int blogNum;
+  @StringToIntConverter()
   final int followingsCount;
+  @StringToIntConverter()
   final int fansCount;
 
   const UserData({

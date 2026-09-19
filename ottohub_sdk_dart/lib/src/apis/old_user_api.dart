@@ -30,9 +30,8 @@ class OldUserApi extends BaseApi implements IOldUserApi {
       'offset': 0,
       'num': ?num,
     });
-    final list =
-        (response['data'] as Map<String, dynamic>)['user_list'] as List<dynamic>;
-    return list.map((e) => UserSummary.fromJson(e as Map<String, dynamic>)).toList();
+    final list = topLevelListOf(response, 'user_list');
+    return list.map(UserSummary.fromJson).toList();
   }
 
   @override
