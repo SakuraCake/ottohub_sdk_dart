@@ -86,6 +86,9 @@ class UserProfile {
   final String? email;
   final String? phone;
   final String? qq;
+
+  /// 服务端可能返回 null,容错为空串。
+  @JsonKey(defaultValue: '')
   final String username;
   final String? time;
   final String? sex;

@@ -1,3 +1,6 @@
+## 0.0.7
+
+- fix: `UserProfile.username` 容错服务端 null(defaultValue 空串)。
 ## 0.0.6
 
 - fix: `UserProfile.uid/experience`、`UserData` 统计字段挂字符串转换器

@@ -77,7 +77,7 @@ UserProfile _$UserProfileFromJson(Map<String, dynamic> json) => UserProfile(
   email: json['email'] as String?,
   phone: json['phone'] as String?,
   qq: json['qq'] as String?,
-  username: json['username'] as String,
+  username: json['username'] as String? ?? '',
   time: json['time'] as String?,
   sex: json['sex'] as String?,
   intro: json['intro'] as String?,
