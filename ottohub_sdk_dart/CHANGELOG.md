@@ -1,3 +1,8 @@
+## 0.0.12
+
+- fix: `getUserProfile`/`getUserData` 解包 /profile 的 `data` 字段
+  (实测 2026-09-23:服务端把载荷包在 data 下,与文档顶层形状不符;
+  原实现解析顶层导致 uid=0、username 空,连带 /user/{uid} 404)。
 ## 0.0.11
 
 - fix: `UserSummary.username` 容错 null(服务端搜索结果可缺)。

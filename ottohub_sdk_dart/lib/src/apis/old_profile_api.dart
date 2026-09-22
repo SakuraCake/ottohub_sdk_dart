@@ -118,10 +118,12 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
 
   @override
   Future<UserProfile> getUserProfile() async {
-    // 2026-09 REST 迁移:/profile,profile 字段位于响应顶层。
+    // 2026-09 REST 迁移:/profile。实测(2026-09-23,curl 验证)服务端把
+    // profile 载荷包在 data 字段下,与文档的顶层形状不符,此处解包。
     final response = await get('/profile', auth: true);
+    final data = response['data'];
     return UserProfile.fromJson(
-        response as Map<String, dynamic>? ?? const {});
+        data is Map<String, dynamic> ? data : const {});
   }
 
   @override
@@ -158,10 +160,13 @@ class OldProfileApi extends BaseApi implements IOldProfileApi {
 
   @override
   Future<UserData> getUserData() async {
-    // 2026-09 REST 迁移:/profile,统计字段位于响应顶层。
+    // 2026-09 REST 迁移:/profile。实测服务端把载荷包在 data 字段下
+    // (同 getUserProfile),此处解包。
     final response = await get('/profile', auth: true);
+    final data = response['data'];
     return UserData.fromJson(coerceStringInts(
-        response, const ['video_num', 'blog_num', 'followings_count', 'fans_count']));
+        data is Map<String, dynamic> ? data : const {},
+        const ['video_num', 'blog_num', 'followings_count', 'fans_count']));
   }
 
   @override
