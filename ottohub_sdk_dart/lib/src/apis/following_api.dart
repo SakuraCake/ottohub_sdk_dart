@@ -70,7 +70,9 @@ class FollowingApi extends BaseApi implements IFollowingApi {
   }) async {
     final params = <String, dynamic>{};
     if (offset != null) params['offset'] = offset;
-    if (num != null) params['num'] = num;
+    // 实测(2026-09-23):服务端 num 上限 18,超出返回
+    // {"status":"error","message":"too_big_num"}(HTTP 400)。
+    if (num != null) params['num'] = num > 18 ? 18 : num;
     final response =
         await get('/following/list/$uid', queryParameters: params);
     return UserListData.fromJson(
@@ -85,7 +87,8 @@ class FollowingApi extends BaseApi implements IFollowingApi {
   }) async {
     final params = <String, dynamic>{};
     if (offset != null) params['offset'] = offset;
-    if (num != null) params['num'] = num;
+    // 同 getFollowingList:num 上限 18。
+    if (num != null) params['num'] = num > 18 ? 18 : num;
     final response =
         await get('/following/fans/$uid', queryParameters: params);
     return UserListData.fromJson(response['data'] as Map<String, dynamic>);

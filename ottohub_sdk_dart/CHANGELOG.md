@@ -1,3 +1,7 @@
+## 0.0.13
+
+- fix: `getFollowingList`/`getFansList` 钳制 num 上限为 18
+  (实测 2026-09-23:num>=19 服务端返回 too_big_num / HTTP 400)。
 ## 0.0.12
 
 - fix: `getUserProfile`/`getUserData` 解包 /profile 的 `data` 字段
